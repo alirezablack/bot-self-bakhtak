@@ -1,5 +1,6 @@
 import os
 import json
+import asyncio
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 
@@ -45,7 +46,10 @@ async def save_message(event):
             file_name = f"{event.message.id}{ext}"
             file_path = os.path.join(save_path, file_name)
             await client.download_media(event.message, file=file_path)
+
+            # ارسال فایل تایم‌دار یا self-destruct با تاخیر ۵ ثانیه
             if is_self_destruct:
+                await asyncio.sleep(5)  # ⬅️ اضافه شد
                 await client.send_file("me", file_path, caption=f"📥 فایل تایم‌دار از {sender_name} ({sender_username})")
 
         message_cache[str(event.message.id)] = {
@@ -72,6 +76,7 @@ async def deleted_handler(event):
             deleted_msg = data["message"]
             media_path = data["media_path"]
 
+            # ارسال متن پیام حذف شده
             msg_text = f'''🚨 *یک پیام حذف شد!*
 
 👤 فرستنده: {sender_name}
@@ -80,7 +85,9 @@ async def deleted_handler(event):
 "{deleted_msg}"'''
             await client.send_message("me", msg_text)
 
+            # ارسال فایل با تاخیر ۵ ثانیه
             if media_path and os.path.exists(media_path):
+                await asyncio.sleep(5)  # ⬅️ اضافه شد
                 await client.send_file("me", media_path, caption=f"📥 فایل حذف‌شده از {sender_name}")
 
             del message_cache[str_id]
@@ -94,5 +101,4 @@ async def main():
     await client.run_until_disconnected()
 
 with client:
-    import asyncio
     client.loop.run_until_complete(main())
