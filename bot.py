@@ -1,8 +1,10 @@
 import os
 import json
 import asyncio
+import threading
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
+from flask import Flask
 
 # ======== CONFIG ========
 api_id = 28069133
@@ -13,6 +15,7 @@ cache_file = "message_cache.json"
 os.makedirs(save_path, exist_ok=True)
 # =======================
 
+# ======== TELEGRAM CLIENT ========
 client = TelegramClient(StringSession(string), api_id, api_hash)
 
 # بارگذاری cache
@@ -22,12 +25,11 @@ if os.path.exists(cache_file):
 else:
     message_cache = {}
 
-# ذخیره cache روی دیسک
 async def save_cache():
     with open(cache_file, "w", encoding="utf-8") as f:
         json.dump(message_cache, f, ensure_ascii=False, indent=2)
 
-# =======================
+# ======================= BOT EVENTS =================
 
 @client.on(events.NewMessage(incoming=True))
 async def save_message(event):
@@ -63,8 +65,6 @@ async def save_message(event):
         }
         await save_cache()
 
-# =======================
-
 @client.on(events.MessageDeleted)
 async def deleted_handler(event):
     for msg_id in event.deleted_ids:
@@ -93,12 +93,24 @@ async def deleted_handler(event):
             del message_cache[str_id]
             await save_cache()
 
-# =======================
-
-async def main():
+# ======================= RUN BOT =================
+async def run_bot():
     await client.start()
-    print("✅ ربات در حال اجرا است...")
+    print("✅ ربات در حال اجرا...")
     await client.run_until_disconnected()
 
-with client:
-    client.loop.run_until_complete(main())
+# ======================= DUMMY WEB SERVER =================
+app = Flask("BotServer")
+
+@app.route("/")
+def home():
+    return "Bot is running ✅"
+
+def run_flask():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+threading.Thread(target=run_flask).start()
+
+# ======================= START BOT =================
+asyncio.run(run_bot())
