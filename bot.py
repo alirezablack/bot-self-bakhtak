@@ -7,7 +7,7 @@ from telethon.sessions import StringSession
 # ======== CONFIG ========
 api_id = 28069133
 api_hash = "5ca91588221d1dd9c46d0df1dd4768f0"
-string = "1BJWap1sBu3S7VzzCfs5ehWqeK_V6m-6y6tXVMqJ-XGBnSIvNpCcLnfTp78NJuWpPsFA1rhgwMWq3JjWoceV0h7FGYwZkhFmwPj0ssvEjNMRBfs6UsCY_NGADx28bmCHtrunULcdwrmkvYEcJvuouZLJXF9sh0Xs2mbIjnoSTKXVaT8NfPOyp8-3la_l3uYfff1MfZ8muINNcHxkO1wAjfS9f77pDCbSUOItqTOaut9XdciD2p37h4UDyQ18Sgid2hlN1gLXLO51Vg8a0VSQLTuPl6v8IlA2SAs5g6FcMZR6O3r9KItHFmVoYiK7hsOXhBDcXeG0BeCLGG8pMjVl29aA07uuZiWw="  # رشته session خودت
+string = "1BJWap1sBu3S7VzzCfs5ehWqeK_V6m-6y6tXVMqJ-XGBnSIvNpCcLnfTp78NJuWpPsFA1rhgwMWq3JjWoceV0h7FGYwZkhFmwPj0ssvEjNMRBfs6UsCY_NGADx28bmCHtrunULcdwrmkvYEcJvuouZLJXF9sh0Xs2mbIjnoSTKXVaT8NfPOyp8-3la_l3uYfff1MfZ8muINNcHxkO1wAjfS9f77pDCbSUOItqTOaut9XdciD2p37h4UDyQ18Sgid2hlN1gLXLO51Vg8a0VSQLTuPl6v8IlA2SAs5g6FcMZR6O3r9KItHFmVoYiK7hsOXhBDcXeG0BeCLGG8pMjVl29aA07uuZiWw="
 save_path = "SavedMessages"
 cache_file = "message_cache.json"
 os.makedirs(save_path, exist_ok=True)
@@ -15,7 +15,7 @@ os.makedirs(save_path, exist_ok=True)
 
 client = TelegramClient(StringSession(string), api_id, api_hash)
 
-# بارگذاری cache از دیسک
+# بارگذاری cache
 if os.path.exists(cache_file):
     with open(cache_file, "r", encoding="utf-8") as f:
         message_cache = json.load(f)
@@ -47,9 +47,9 @@ async def save_message(event):
             file_path = os.path.join(save_path, file_name)
             await client.download_media(event.message, file=file_path)
 
-            # ارسال فایل تایم‌دار یا self-destruct با تاخیر ۵ ثانیه
+            # ارسال فایل تایم‌دار با تاخیر ۵ ثانیه
             if is_self_destruct:
-                await asyncio.sleep(5)  # ⬅️ اضافه شد
+                await asyncio.sleep(5)
                 await client.send_file("me", file_path, caption=f"📥 فایل تایم‌دار از {sender_name} ({sender_username})")
 
         message_cache[str(event.message.id)] = {
@@ -87,7 +87,7 @@ async def deleted_handler(event):
 
             # ارسال فایل با تاخیر ۵ ثانیه
             if media_path and os.path.exists(media_path):
-                await asyncio.sleep(5)  # ⬅️ اضافه شد
+                await asyncio.sleep(5)
                 await client.send_file("me", media_path, caption=f"📥 فایل حذف‌شده از {sender_name}")
 
             del message_cache[str_id]
