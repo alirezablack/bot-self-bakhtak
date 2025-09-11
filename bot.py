@@ -9,8 +9,8 @@ from telethon.sessions import StringSession
 from flask import Flask
 
 # ======== CONFIG ========
-api_id = 28069133
-api_hash = "5ca91588221d1dd9c46d0df1dd4768f0"
+api_id = 9118112
+api_hash = "b1a080dcfa468f0211e9e8d5213de3bf"
 string = "1BJWap1sBu5awWzUlfzmN1bS9Ya0LGxxPTClENkP3vfYxZbRjs2cYwd_oSJ41zHnlvpvA8T8N1k_QCymdt2qGqtwQCkmThVnZBUk-_-TPdxBVsUXVqyP6azBvJnGYLdxXzGZ8Isb0YTDTydarHBSkJuMNOrzCYJ4xqJmxznjI_DaBky765LM1ol8iK13C6XQChKITfI5enGKqhqzU0na0Pl1klrGQ1X06pbkffyPoZTHyynIY4BECvvkleaJyR7jeY5O8oKwGSEE1TOibbMVOYq_BFypU4ttIrHSWRFdwcdmaidH_QQRtX2ZOlJSTDvRgXWbc3lm5Uqj4-RxfUfgODI7zQ1lRDkQ="
 save_path = "SavedMessages"
 cache_file = "message_cache.json"
@@ -129,4 +129,5 @@ threading.Thread(target=keep_alive, daemon=True).start()
 
 # ======================= START BOT =================
 asyncio.run(run_bot())
+
 
