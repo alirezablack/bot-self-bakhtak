@@ -2,6 +2,8 @@ import os
 import json
 import asyncio
 import threading
+import time
+import requests
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from flask import Flask
@@ -49,7 +51,6 @@ async def save_message(event):
             file_path = os.path.join(save_path, file_name)
             await client.download_media(event.message, file=file_path)
 
-            # ارسال فایل تایم‌دار با تاخیر ۵ ثانیه
             if is_self_destruct:
                 await asyncio.sleep(5)
                 await client.send_file("me", file_path, caption=f"📥 فایل تایم‌دار از {sender_name} ({sender_username})")
@@ -76,7 +77,6 @@ async def deleted_handler(event):
             deleted_msg = data["message"]
             media_path = data["media_path"]
 
-            # ارسال متن پیام حذف شده
             msg_text = f'''🚨 *یک پیام حذف شد!*
 
 👤 فرستنده: {sender_name}
@@ -85,7 +85,6 @@ async def deleted_handler(event):
 "{deleted_msg}"'''
             await client.send_message("me", msg_text)
 
-            # ارسال فایل با تاخیر ۵ ثانیه
             if media_path and os.path.exists(media_path):
                 await asyncio.sleep(5)
                 await client.send_file("me", media_path, caption=f"📥 فایل حذف‌شده از {sender_name}")
@@ -110,7 +109,20 @@ def run_flask():
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
 
-threading.Thread(target=run_flask).start()
+# ======================= KEEP ALIVE =================
+def keep_alive():
+    url = "http://127.0.0.1:10000"  # آدرس وب‌سرور خودت (اگر روی هاست داری، آدرس هاستت رو بذار)
+    while True:
+        try:
+            requests.get(url)
+            print("🔄 Keep-alive ping sent.")
+        except Exception as e:
+            print("⚠️ Keep-alive error:", e)
+        time.sleep(300)  # هر ۵ دقیقه یکبار
+
+# اجرای Flask و KeepAlive در ترد جدا
+threading.Thread(target=run_flask, daemon=True).start()
+threading.Thread(target=keep_alive, daemon=True).start()
 
 # ======================= START BOT =================
 asyncio.run(run_bot())
