@@ -11,7 +11,7 @@ from flask import Flask
 # ======== CONFIG ========
 api_id = 28069133
 api_hash = "5ca91588221d1dd9c46d0df1dd4768f0"
-string = "1BJWap1sBu3S7VzzCfs5ehWqeK_V6m-6y6tXVMqJ-XGBnSIvNpCcLnfTp78NJuWpPsFA1rhgwMWq3JjWoceV0h7FGYwZkhFmwPj0ssvEjNMRBfs6UsCY_NGADx28bmCHtrunULcdwrmkvYEcJvuouZLJXF9sh0Xs2mbIjnoSTKXVaT8NfPOyp8-3la_l3uYfff1MfZ8muINNcHxkO1wAjfS9f77pDCbSUOItqTOaut9XdciD2p37h4UDyQ18Sgid2hlN1gLXLO51Vg8a0VSQLTuPl6v8IlA2SAs5g6FcMZR6O3r9KItHFmVoYiK7hsOXhBDcXeG0BeCLGG8pMjVl29aA07uuZiWw="
+string = "1BJWap1sBu5awWzUlfzmN1bS9Ya0LGxxPTClENkP3vfYxZbRjs2cYwd_oSJ41zHnlvpvA8T8N1k_QCymdt2qGqtwQCkmThVnZBUk-_-TPdxBVsUXVqyP6azBvJnGYLdxXzGZ8Isb0YTDTydarHBSkJuMNOrzCYJ4xqJmxznjI_DaBky765LM1ol8iK13C6XQChKITfI5enGKqhqzU0na0Pl1klrGQ1X06pbkffyPoZTHyynIY4BECvvkleaJyR7jeY5O8oKwGSEE1TOibbMVOYq_BFypU4ttIrHSWRFdwcdmaidH_QQRtX2ZOlJSTDvRgXWbc3lm5Uqj4-RxfUfgODI7zQ1lRDkQ="
 save_path = "SavedMessages"
 cache_file = "message_cache.json"
 os.makedirs(save_path, exist_ok=True)
@@ -129,3 +129,4 @@ threading.Thread(target=keep_alive, daemon=True).start()
 
 # ======================= START BOT =================
 asyncio.run(run_bot())
+
