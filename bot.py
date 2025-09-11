@@ -94,7 +94,10 @@ async def deleted_handler(event):
 
 # ======================= RUN BOT =================
 async def run_bot():
-    await client.start()
+    await client.connect()
+    if not await client.is_user_authorized():
+        print("❌ سشن معتبر نیست. باید string session درست بدی.")
+        return
     print("✅ ربات در حال اجرا...")
     await client.run_until_disconnected()
 
@@ -111,14 +114,14 @@ def run_flask():
 
 # ======================= KEEP ALIVE =================
 def keep_alive():
-    url = "http://127.0.0.1:10000"  # آدرس وب‌سرور خودت (اگر روی هاست داری، آدرس هاستت رو بذار)
+    url = "https://bot-self-bakhtak.onrender.com"  # ⚠️ آدرس عمومی Render رو اینجا بذار
     while True:
         try:
             requests.get(url)
             print("🔄 Keep-alive ping sent.")
         except Exception as e:
             print("⚠️ Keep-alive error:", e)
-        time.sleep(300)  # هر ۵ دقیقه یکبار
+        time.sleep(300)  # هر ۵ دقیقه
 
 # اجرای Flask و KeepAlive در ترد جدا
 threading.Thread(target=run_flask, daemon=True).start()
